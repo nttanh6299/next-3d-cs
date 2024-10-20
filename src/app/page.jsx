@@ -17,11 +17,18 @@ function Model({ legacy, url, textureUrl, textureSecondUrl }) {
         obj.castShadow = obj.receiveShadow = false;
         obj.material.envMapIntensity = 0.8;
 
-        if ((legacy && obj.name === 'model') || (!legacy && obj.name === 'legacy')) {
+        if (
+          (legacy && obj.name === 'model') ||
+          (legacy && obj.name === 'model_lens') ||
+          (legacy && obj.name === 'model_scope') ||
+          (!legacy && obj.name === 'legacy') ||
+          (!legacy && obj.name === 'legacy_lens') ||
+          (!legacy && obj.name === 'legacy_scope')
+        ) {
           obj.visible = false;
         }
 
-        if ((legacy && obj.name === 'model_lens') || (!legacy && obj.name === 'legacy_lens')) {
+        if ((legacy && obj.name === 'legacy_lens') || (!legacy && obj.name === 'model_lens')) {
           obj.material = obj.material.clone();
           obj.material.color = 'black';
         }
@@ -103,12 +110,13 @@ const Scene = () => {
 
   return (
     <>
-      <color attach="background" args={['#f5efe6']} />
+      <color attach="background" args={['black']} />
+      {/* <color attach="background" args={['#f5efe6']} /> */}
       <ambientLight intensity={0.5} />
       <Suspense fallback={null}>
         {modelUrl && (
           <Model
-            legacy={true}
+            legacy={false}
             url={modelUrl}
             textureUrl={textureUrl}
             textureSecondUrl="/textures/negev_bullets.png"

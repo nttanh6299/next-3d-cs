@@ -16,8 +16,8 @@ Defindex -> Paintindex -> Thumbnail/Texture/Model
 
 #### Sniper
 
-- AWP: scope issue
-- SCAR20: scope issue
+- AWP: :white_check_mark:
+- SCAR20: :white_check_mark:
 - SSG08: scope :white_check_mark:
 - G3SG1: :white_check_mark:
 
