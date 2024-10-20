@@ -1,14 +1,15 @@
 'use client';
 
-import { Suspense, useEffect, useState, useLayoutEffect } from 'react';
-import { SRGBColorSpace, RepeatWrapping, TextureLoader } from 'three';
+import { Suspense, useEffect, useState, useLayoutEffect, useRef } from 'react';
+import { SRGBColorSpace, RepeatWrapping, TextureLoader, DirectionalLightHelper } from 'three';
 import { Canvas } from '@react-three/fiber';
-import { Environment, OrbitControls, useGLTF, Stage } from '@react-three/drei';
+import { Environment, OrbitControls, useGLTF, Stage, useHelper } from '@react-three/drei';
 import { HttpClient } from '@/lib/axios';
+import { useControls } from 'leva';
 
 function Model({ legacy, url, textureUrl, textureSecondUrl }) {
   const { scene } = useGLTF(url);
-  console.log(scene);
+
   useLayoutEffect(() => {
     scene.traverse((obj) => {
       if (obj.isMesh) {
@@ -108,15 +109,37 @@ const Scene = () => {
       });
   }, []);
 
+  const directionalLightRef = useRef(null);
+  const { lightColor, lightIntensity } = useControls({
+    lightColor: 'white',
+    lightIntensity: {
+      value: 0.5,
+      min: 0,
+      max: 5,
+      step: 0.1,
+    },
+  });
+
+  useHelper(directionalLightRef, DirectionalLightHelper, 0.8, 'red');
+
   return (
     <>
       <color attach="background" args={['black']} />
       {/* <color attach="background" args={['#f5efe6']} /> */}
       <ambientLight intensity={0.5} />
+      <directionalLight
+        position={[0, 0, 2]}
+        ref={directionalLightRef}
+        color={lightColor}
+        intensity={lightIntensity}
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+      />
       <Suspense fallback={null}>
         {modelUrl && (
           <Model
-            legacy={false}
+            legacy={true}
             url={modelUrl}
             textureUrl={textureUrl}
             textureSecondUrl="/textures/negev_bullets.png"

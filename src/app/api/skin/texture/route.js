@@ -7,7 +7,7 @@ export async function GET() {
       process.cwd(),
       'public',
       'textures',
-      '1d16102c55b03c334005f3c7cfabce79_component1_texture1.png',
+      'd641ed9ef6269b3965de72845680919a_component1_texture1.png',
     );
     const file = await fs.readFile(filePath);
     return new Response(file);

@@ -3,7 +3,6 @@ import { promises as fs } from 'fs';
 
 export async function GET() {
   try {
-    // const filePath = path.join(process.cwd(), 'public', 'models', 'weapon_smg_mp9.glb');
     const filePath = path.join(process.cwd(), 'public', 'models', 'weapon_pist_revolver.glb');
     const file = await fs.readFile(filePath);
     return new Response(file, {

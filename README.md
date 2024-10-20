@@ -30,7 +30,7 @@ Defindex -> Paintindex -> Thumbnail/Texture/Model
 - Glock 18: :white_check_mark:
 - P2000: :white_check_mark:
 - P250: :white_check_mark:
-- Revolver: position issue
+- Revolver: :white_check_mark:
 - Tec9: :white_check_mark:
 - USP-S: :white_check_mark:
 
