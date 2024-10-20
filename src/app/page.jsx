@@ -1,77 +1,129 @@
 'use client';
 
-import { useRef } from 'react';
-import { DirectionalLightHelper } from 'three';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { MeshWobbleMaterial, OrbitControls, useHelper } from '@react-three/drei';
-import { useControls } from 'leva';
+import { Suspense, useEffect, useState, useLayoutEffect } from 'react';
+import { SRGBColorSpace, RepeatWrapping, TextureLoader } from 'three';
+import { Canvas } from '@react-three/fiber';
+import { Environment, OrbitControls, useGLTF, Stage } from '@react-three/drei';
+import { HttpClient } from '@/lib/axios';
 
-const TaurusKnot = ({ position, args }) => {
-  const { color, radius } = useControls({
-    color: 'lightblue',
-    radius: {
-      value: 1,
-      min: 0,
-      max: 10,
-      step: 0.5,
-    },
-  });
+function Model({ legacy, url, textureUrl, textureSecondUrl }) {
+  const { scene } = useGLTF(url);
+  console.log(scene);
+  useLayoutEffect(() => {
+    scene.traverse((obj) => {
+      if (obj.isMesh) {
+        const loader = new TextureLoader();
 
-  const ref = useRef();
+        obj.castShadow = obj.receiveShadow = false;
+        obj.material.envMapIntensity = 0.8;
 
-  useFrame((state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.x += delta;
-      ref.current.rotation.y += delta;
-      ref.current.position.z = Math.sin(state.clock.getElapsedTime()) * 2;
-    }
-  });
+        if ((legacy && obj.name === 'model') || (!legacy && obj.name === 'legacy')) {
+          obj.visible = false;
+        }
+
+        if ((legacy && obj.name === 'model_lens') || (!legacy && obj.name === 'legacy_lens')) {
+          obj.material = obj.material.clone();
+          obj.material.color = 'black';
+        }
+
+        if (textureSecondUrl) {
+          if (
+            (legacy && obj.name === 'legacy_second') ||
+            (legacy && obj.name === 'legacy_scope') ||
+            (!legacy && obj.name === 'model_second') ||
+            (!legacy && obj.name === 'model_scope') ||
+            obj.name === 'bullets'
+          ) {
+            obj.material = obj.material.clone();
+            loader.load(textureSecondUrl, (loadedTexture) => {
+              loadedTexture.colorSpace = SRGBColorSpace;
+              loadedTexture.flipY = false;
+              loadedTexture.wrapS = RepeatWrapping;
+              loadedTexture.wrapT = RepeatWrapping;
+              obj.material.map = loadedTexture;
+              obj.material.roughness = 0.6;
+              obj.material.needsUpdate = true;
+            });
+          }
+        }
+
+        if (textureUrl) {
+          if ((legacy && obj.name === 'legacy') || (!legacy && obj.name === 'model')) {
+            obj.material = obj.material.clone();
+            loader.load(textureUrl, (loadedTexture) => {
+              loadedTexture.colorSpace = SRGBColorSpace;
+              loadedTexture.flipY = false;
+              loadedTexture.wrapS = RepeatWrapping;
+              loadedTexture.wrapT = RepeatWrapping;
+              obj.material.map = loadedTexture;
+              obj.material.roughness = 0.5;
+              obj.material.needsUpdate = true;
+            });
+          }
+        }
+      }
+    });
+  }, [scene, legacy, textureUrl, textureSecondUrl]);
 
   return (
-    <mesh position={position} ref={ref}>
-      <torusKnotGeometry args={[radius, ...args]} />
-      <MeshWobbleMaterial factor={5} speed={2} color={color} />
-    </mesh>
+    // <Center ref={ref} {...props} dispose={null}>
+    //   <primitive object={scene} />
+    // </Center>
+    <Stage intensity={0.8} environment="warehouse" adjustCamera={false}>
+      <primitive object={scene} />
+    </Stage>
   );
-};
+}
 
 const Scene = () => {
-  const directionalLightRef = useRef(null);
+  const [modelUrl, setModelUrl] = useState(null);
+  const [textureUrl, setTextureUrl] = useState(null);
 
-  const { lightColor, lightIntensity } = useControls({
-    lightColor: 'white',
-    lightIntensity: {
-      value: 0.5,
-      min: 0,
-      max: 5,
-      step: 0.1,
-    },
-  });
+  useEffect(() => {
+    HttpClient.get('/api/skin', { responseType: 'blob' })
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        setModelUrl(url);
+      })
+      .catch((error) => {
+        console.error('Error fetching model:', error);
+      });
+  }, []);
 
-  useHelper(directionalLightRef, DirectionalLightHelper, 0.8, 'red');
+  useEffect(() => {
+    HttpClient.get('/api/skin/texture', { responseType: 'blob' })
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        setTextureUrl(url);
+      })
+      .catch((error) => {
+        console.error('Error fetching texture:', error);
+      });
+  }, []);
 
   return (
     <>
       <color attach="background" args={['#f5efe6']} />
-      <directionalLight
-        position={[0, 0, 2]}
-        ref={directionalLightRef}
-        color={lightColor}
-        intensity={lightIntensity}
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-      />
       <ambientLight intensity={0.5} />
-      <TaurusKnot position={[0, 0, 0]} args={[0.1, 1000, 50]} />
-      <OrbitControls enableZoom={false} />
+      <Suspense fallback={null}>
+        {modelUrl && (
+          <Model
+            legacy={true}
+            url={modelUrl}
+            textureUrl={textureUrl}
+            textureSecondUrl="/textures/negev_bullets.png"
+          />
+        )}
+        <Environment preset="warehouse" />
+      </Suspense>
+      <OrbitControls enableZoom={true} />
     </>
   );
 };
 
 function App() {
   return (
-    <Canvas>
+    <Canvas flat shadows dpr={[1, 2]} camera={{ fov: 40 }}>
       <Scene />
     </Canvas>
   );

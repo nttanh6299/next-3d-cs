@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### Get data
 
-## Getting Started
+Defindex -> Paintindex -> Thumbnail/Texture/Model
 
-First, run the development server:
+### Models/Textures Testing
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+#### Rifle
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- AK47: :white_check_mark:
+- M4A1 Silencer: :white_check_mark:
+- AUG: scope :white_check_mark:
+- SG556: :white_check_mark:
+- Famas: :white_check_mark:
+- Galilar: :white_check_mark:
+- M4A4: :white_check_mark:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+#### Sniper
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- AWP: scope issue
+- SCAR20: scope issue
+- SSG08: scope :white_check_mark:
+- G3SG1: :white_check_mark:
 
-## Learn More
+#### Pistol
 
-To learn more about Next.js, take a look at the following resources:
+- CZ75A: :white_check_mark:
+- Deagle: :white_check_mark:
+- Dual Beretta: :white_check_mark:
+- Five seven: :white_check_mark:
+- Glock 18: :white_check_mark:
+- P2000: :white_check_mark:
+- P250: :white_check_mark:
+- Revolver: position issue
+- Tec9: :white_check_mark:
+- USP-S: :white_check_mark:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Machinegun
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- M249: :white_check_mark:
+- Negev: bullets :white_check_mark:
 
-## Deploy on Vercel
+#### SMG
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- MAC-10: :white_check_mark:
+- MP5-SD: :white_check_mark:
+- MP7: :white_check_mark:
+- MP9: :white_check_mark:
+- P90: :white_check_mark:
+- Bizon: :white_check_mark:
+- UMP-45: :white_check_mark:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#### Shotgun
+
+- MAG-7: :white_check_mark:
+- Nova: :white_check_mark:
+- Sawed-off: :white_check_mark:
+- XM1014: :white_check_mark:
+
+#### Equipment
+
+- Zeus: :white_check_mark:
+
+#### Knife
+
+- Bayonet: :white_check_mark:
+- Bowie: :white_check_mark:
+- Butterfly: :white_check_mark:
+- Classic: :white_check_mark:
+- Falchion: :white_check_mark:
+- Flip: :white_check_mark:
+- Gut: :white_check_mark:
+- Huntsman: :white_check_mark:
+- Karambit: :white_check_mark:
+- Kukri: :white_check_mark:
+- M9: :white_check_mark:
+- Navaja: :white_check_mark:
+- Nomad: :white_check_mark:
+- Paracord: :white_check_mark:
+- Draggers: :white_check_mark:
+- Skeleton: :white_check_mark:
+- Stiletto: :white_check_mark:
+- Survival: :white_check_mark:
+- Talon: :white_check_mark:
+- Ursus: :white_check_mark:
