@@ -10,7 +10,7 @@ export async function POST() {
     if (data) {
       const group = groupBy(data, 'type_name');
       const category = Object.entries(group)
-        .filter(([key]) => key !== 'Agent')
+        .filter(([key]) => !['Agent', 'Gloves'].includes(key))
         .reduce(
           (acc, [key, values]) => ({ ...acc, [key !== 'undefined' ? key : 'Equipment']: values }),
           {},

@@ -1,6 +1,6 @@
 ### Get data
 
-Defindex -> Paintindex -> Thumbnail/Texture/Model
+Defindex -> Paintindex -> Floatlist -> Thumbnail/Texture
 
 ### Models/Textures Testing
 
